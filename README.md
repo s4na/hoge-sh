@@ -1,46 +1,37 @@
 # hoge-sh
 
-シンプルなリモートシェル実行ツール
+リモートからシェルスクリプトを実行するデモ
 
 ## 概要
 
-このツールは、リモートでシェルコマンドを実行できるクライアント/サーバーシステムです。
-
-## ファイル構成
-
-- `server.py` - リモートシェル実行サーバー
-- `client.py` - リモートシェル実行クライアント
-- `hoge.sh` - "hoge"と表示するサンプルスクリプト
+GitHubにホストされたシェルスクリプトを、curlで取得して直接実行できます。
 
 ## 使い方
 
-### 1. サーバーを起動
+ターミナルで以下のコマンドを実行すると、"hoge"と表示されます:
 
 ```bash
-python3 server.py
+curl -fsSL https://raw.githubusercontent.com/s4na/hoge-sh/main/hoge.sh | bash
 ```
 
-サーバーはポート9999で待機します。
-
-### 2. クライアントからコマンドを実行
-
-別のターミナルで、クライアントを使ってコマンドを実行します:
+または、wgetを使う場合:
 
 ```bash
-# hogeスクリプトを実行
-python3 client.py './hoge.sh'
-
-# その他のコマンドを実行
-python3 client.py 'echo hoge'
-python3 client.py 'ls -la'
-
-# リモートホストを指定
-python3 client.py 'echo hoge' 192.168.1.100 9999
+wget -qO- https://raw.githubusercontent.com/s4na/hoge-sh/main/hoge.sh | bash
 ```
 
-## セキュリティ注意事項
+## ファイル構成
 
-⚠️ このツールは教育目的のデモンストレーションです。
-- 認証機能がありません
-- 暗号化されていません
-- 本番環境での使用は推奨されません
+- `hoge.sh` - "hoge"と表示するシンプルなシェルスクリプト
+
+## 仕組み
+
+1. `curl -fsSL` で GitHub の raw コンテンツを取得
+2. パイプ (`|`) で bash に渡して実行
+
+## オプション説明
+
+- `-f`: 失敗時にエラーを返す
+- `-s`: サイレントモード（進捗を表示しない）
+- `-S`: エラーは表示する
+- `-L`: リダイレクトに従う
